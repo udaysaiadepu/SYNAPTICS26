@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNAPTICS 2K26</title>
+    <title>SYNAPTICS 2K26 | ECE JNTUH UCES</title>
     
     <style>
-        /* 1. RESET & VARIABLES */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* 1. RESET & CORE VARIABLES */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --bg-deep: #050508;
@@ -31,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* 2. FIXED BACKGROUND CANVAS */
+        /* 2. FIXED BACKGROUND */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -51,19 +47,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(5, 5, 8, 0.7);
+            background: rgba(5, 5, 8, 0.75);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
         }
 
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
+        .logo-text { font-size: 1.2rem; font-weight: 800; letter-spacing: 2px; }
 
-        /* 4. HERO SECTION WITH SEAMLESS BLEND */
+        /* 4. HERO SECTION */
         .hero {
             height: 100vh;
             display: flex;
@@ -71,23 +63,12 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 10%;
-            /* Gradient that blends into the page background */
-            background: linear-gradient(to bottom, 
-                        var(--hero-glow) 0%, 
-                        var(--bg-deep) 100%);
-            position: relative;
-        }
-
-        /* Galactic Logo Glow */
-        .main-logo-container {
-            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom, var(--hero-glow) 0%, var(--bg-deep) 100%);
             position: relative;
         }
 
         .fest-logo {
             max-width: 320px;
-            height: auto;
             filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.4));
             animation: pulseGlow 4s ease-in-out infinite;
         }
@@ -97,67 +78,52 @@
             50% { filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.6)); transform: scale(1.02); }
         }
 
-        .hero h2 {
-            font-size: 1.5rem;
-            letter-spacing: 12px;
-            color: var(--accent);
-            text-transform: uppercase;
-            font-weight: 300;
-        }
-
-        /* 5. CONTENT AREA */
-        .container {
+        /* 5. ABOUT SECTION (Blue to White Gradient) */
+        .about-section {
+            padding: 100px 10%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 8rem 5%;
             position: relative;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+        .about-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            /* Blue to White Gradient */
+            background: linear-gradient(90deg, #00e5ff 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
+        .about-content {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            column-count: 1;
+            gap: 40px;
+            text-align: justify;
+        }
+
+        @media (min-width: 768px) { .about-content { column-count: 2; } }
+
+        /* 6. GRID & CARDS */
+        .container { max-width: 1200px; margin: 0 auto; padding: 5rem 5%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .card {
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 2.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 12px;
             transition: all 0.3s ease;
         }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); background: rgba(0, 229, 255, 0.03); }
+        .card h3 { color: var(--accent); margin-bottom: 1rem; }
 
-        .card:hover {
-            border-color: var(--accent);
-            background: rgba(0, 229, 255, 0.03);
-            transform: translateY(-5px);
-        }
-
-        .card h3 {
-            margin-bottom: 1rem;
-            color: var(--accent);
-            font-size: 1.4rem;
-        }
-
-        .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-        }
-
-        /* Animation class for scroll reveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        /* REVEAL ANIMATION */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -166,43 +132,53 @@
 
     <nav>
         <div class="logo-text">SYNAPTICS <span style="color:var(--accent)">2K26</span></div>
-        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);">STATUS: CONNECTED</div>
+        <div style="font-size: 0.7rem; color: var(--accent);">JNTUH UCES</div>
     </nav>
 
     <section class="hero">
-        <div class="main-logo-container">
-            <img src="SYNAPTICS.png" alt="SYNAPTICS" class="fest-logo">
+        <img src="SYNAPTICS.png" alt="SYNAPTICS" class="fest-logo">
+        <h2 style="letter-spacing: 12px; color: var(--accent); font-weight: 300; margin-top: 1rem;">2K26</h2>
+    </section>
+
+    <section class="about-section">
+        <h1 class="about-title reveal">About Synaptics</h1>
+        <div class="about-content reveal">
+            <p style="margin-bottom: 1.5rem;">
+                <strong>Synaptics 2K26</strong> is the premier national-level technical symposium organized by the 
+                Department of Electronics and Communication Engineering at <strong>JNTUH University College of Engineering Sultanpur (UCES)</strong>. 
+                Designed as a nexus for innovation, it challenges the brightest minds to bridge the gap between 
+                theoretical hardware design and the future of intelligent systems.
+            </p>
+            <p>
+                The Department of ECE at JNTUH UCES, established with a vision to produce globally competent engineers, 
+                boasts state-of-the-art laboratory facilities including VLSI design, Embedded Systems, and Microwave Communications. 
+                Our academic rigor is matched by a commitment to research excellence, fostering an environment where 
+                students push the boundaries of signal processing, robotics, and neural engineering within the 
+                prestigious JNTU Hyderabad ecosystem.
+            </p>
         </div>
-        <h2>2K26</h2>
-        <p style="margin-top: 20px; color: var(--text-dim); max-width: 500px;">
-            The central nervous system of engineering excellence. Connect your mind to the future.
-        </p>
     </section>
 
     <section class="container">
-        <h2 class="reveal" style="font-size: 2.5rem; margin-bottom: 1rem;">Core Nodes</h2>
-        <p class="reveal" style="color: var(--text-dim); margin-bottom: 3rem;">Explore the fundamental pillars of this year's symposium.</p>
-        
+        <h2 class="reveal" style="font-size: 2.2rem; border-left: 5px solid var(--accent); padding-left: 15px;">Core Nodes</h2>
         <div class="grid">
             <div class="card reveal">
                 <h3>Neural Interface</h3>
-                <p>An immersion into Brain-Computer Interfacing. Analyze signal processing techniques at a university-grade complexity.</p>
+                <p>Advanced workshops on Signal Processing and BCI, exploring the technical depth of neural engineering.</p>
             </div>
-            
             <div class="card reveal">
                 <h3>Logic Flux</h3>
-                <p>High-stakes circuit debugging and optimization. Bridge the gap between theoretical physics and hardware reality.</p>
+                <p>An intense circuit design and debugging arena focused on high-speed hardware optimization.</p>
             </div>
-            
             <div class="card reveal">
                 <h3>Synapse Hack</h3>
-                <p>A 24-hour sprint focusing on neural network architectures and autonomous systems integration.</p>
+                <p>The flagship development marathon where code meets embedded hardware for real-world solutions.</p>
             </div>
         </div>
     </section>
 
     <script>
-        // BACKGROUND STARFIELD LOGIC
+        // BACKGROUND STARFIELD
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -211,12 +187,12 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             stars = [];
-            for(let i=0; i<200; i++) {
+            for(let i=0; i<150; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    size: Math.random() * 1.8,
-                    speed: Math.random() * 0.05,
+                    size: Math.random() * 1.5,
+                    speed: Math.random() * 0.04,
                     opacity: Math.random()
                 });
             }
@@ -225,9 +201,8 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             stars.forEach(s => {
-                s.y -= s.speed; // Subtle upward drift
+                s.y -= s.speed;
                 if(s.y < 0) s.y = canvas.height;
-                
                 ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
@@ -236,21 +211,13 @@
             requestAnimationFrame(animate);
         }
 
-        // SCROLL REVEAL LOGIC
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
 
         window.addEventListener('resize', init);
-        
-        // Initializing everything
         document.addEventListener('DOMContentLoaded', () => {
-            init();
-            animate();
+            init(); animate();
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         });
     </script>
