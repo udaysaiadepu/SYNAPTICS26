@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPTICS 2K26</title>
+    
+    <style>
+        /* 1. RESET & VARIABLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #050508;
+            --hero-glow: #0e1a2b;
+            --accent: #00e5ff;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 2. FIXED BACKGROUND CANVAS */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 3. NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 8, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        /* 4. HERO SECTION WITH SEAMLESS BLEND */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 10%;
+            /* Gradient that blends into the page background */
+            background: linear-gradient(to bottom, 
+                        var(--hero-glow) 0%, 
+                        var(--bg-deep) 100%);
+            position: relative;
+        }
+
+        /* Galactic Logo Glow */
+        .main-logo-container {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .fest-logo {
+            max-width: 320px;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.4));
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.3)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.6)); transform: scale(1.02); }
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            letter-spacing: 12px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* 5. CONTENT AREA */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 229, 255, 0.03);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Animation class for scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav>
+        <div class="logo-text">SYNAPTICS <span style="color:var(--accent)">2K26</span></div>
+        <div style="font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);">STATUS: CONNECTED</div>
+    </nav>
+
+    <section class="hero">
+        <div class="main-logo-container">
+            <img src="SYNAPTICS.png" alt="SYNAPTICS" class="fest-logo">
+        </div>
+        <h2>2K26</h2>
+        <p style="margin-top: 20px; color: var(--text-dim); max-width: 500px;">
+            The central nervous system of engineering excellence. Connect your mind to the future.
+        </p>
+    </section>
+
+    <section class="container">
+        <h2 class="reveal" style="font-size: 2.5rem; margin-bottom: 1rem;">Core Nodes</h2>
+        <p class="reveal" style="color: var(--text-dim); margin-bottom: 3rem;">Explore the fundamental pillars of this year's symposium.</p>
+        
+        <div class="grid">
+            <div class="card reveal">
+                <h3>Neural Interface</h3>
+                <p>An immersion into Brain-Computer Interfacing. Analyze signal processing techniques at a university-grade complexity.</p>
+            </div>
+            
+            <div class="card reveal">
+                <h3>Logic Flux</h3>
+                <p>High-stakes circuit debugging and optimization. Bridge the gap between theoretical physics and hardware reality.</p>
+            </div>
+            
+            <div class="card reveal">
+                <h3>Synapse Hack</h3>
+                <p>A 24-hour sprint focusing on neural network architectures and autonomous systems integration.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // BACKGROUND STARFIELD LOGIC
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.8,
+                    speed: Math.random() * 0.05,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.y -= s.speed; // Subtle upward drift
+                if(s.y < 0) s.y = canvas.height;
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // SCROLL REVEAL LOGIC
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        window.addEventListener('resize', init);
+        
+        // Initializing everything
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            animate();
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
