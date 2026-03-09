@@ -6,7 +6,7 @@
     <title>SYNAPTICS 2K26 | ECE JNTUH UCES</title>
     
     <style>
-        /* 1. RESET & CORE VARIABLES */
+        /* 1. RESET & VARIABLES */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
@@ -78,7 +78,7 @@
             50% { filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.6)); transform: scale(1.02); }
         }
 
-        /* 5. ABOUT SECTION (Blue to White Gradient) */
+        /* 5. ABOUT SECTION */
         .about-section {
             padding: 100px 10%;
             max-width: 1200px;
@@ -86,16 +86,67 @@
             position: relative;
         }
 
+        /* THE ELECTRIFIED BUZZ TITLE */
+        .about-title-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
         .about-title {
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 900;
             text-transform: uppercase;
-            margin-bottom: 2rem;
-            /* Blue to White Gradient */
-            background: linear-gradient(90deg, #00e5ff 0%, #ffffff 100%);
+            letter-spacing: -1px;
+            
+            /* Gradient: Top to Down (Blue to White Faze) */
+            background: linear-gradient(to bottom, #00e5ff 0%, #ffffff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            
+            position: relative;
+            z-index: 10;
+        }
+
+        /* THE GLITCH/BUZZ LAYERS */
+        .about-title::before,
+        .about-title::after {
+            content: "About Synaptics";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-deep); /* Masks the gradient behind it */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        /* The "Electrical Arc" effect (Cyan Glitch) */
+        .about-title::before {
+            color: rgba(0, 229, 255, 0.9);
+            -webkit-text-fill-color: initial;
+            animation: electricBuzz 3s infinite;
+            animation-delay: 0.5s;
+        }
+
+        /* The "Voltage Jolt" effect (Secondary erratic flash) */
+        .about-title::after {
+            color: rgba(255, 255, 255, 0.8);
+            -webkit-text-fill-color: initial;
+            animation: electricBuzz 4s infinite;
+            animation-delay: 2s;
+        }
+
+        /* THE BUZZ ANIMATION (Using clip-path for speed) */
+        @keyframes electricBuzz {
+            0% { opacity: 0; transform: translate(0, 0); clip-path: inset(50% 0 30% 0); }
+            1% { opacity: 1; transform: translate(-5px, 2px); clip-path: inset(10% 0 80% 0); }
+            2% { opacity: 1; transform: translate(5px, -2px); clip-path: inset(60% 0 10% 0); }
+            3% { opacity: 0; transform: translate(0, 0); clip-path: inset(50% 0 30% 0); }
+            100% { opacity: 0; }
         }
 
         .about-content {
@@ -141,7 +192,9 @@
     </section>
 
     <section class="about-section">
-        <h1 class="about-title reveal">About Synaptics</h1>
+        <div class="about-title-container reveal">
+            <h1 class="about-title">About Synaptics</h1>
+        </div>
         <div class="about-content reveal">
             <p style="margin-bottom: 1.5rem;">
                 <strong>Synaptics 2K26</strong> is the premier national-level technical symposium organized by the 
