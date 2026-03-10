@@ -6,23 +6,20 @@
     <title>SYNAPTICS 2K26 | ECE JNTUH UCES</title>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap');
 
         :root {
             --bg-ultra: #020205;
-            --bg-panel: #050508;
             --accent: #00e5ff;
             --accent-rgb: 0, 229, 255;
-            --accent-red: #ff3e3e;
             --text-high: #ffffff;
             --text-mid: #a0a0a0;
             --border: rgba(255, 255, 255, 0.1);
             --glass: rgba(255, 255, 255, 0.03);
             --curve: cubic-bezier(0.19, 1, 0.22, 1);
-            --glow: 0 0 20px rgba(0, 229, 255, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* Custom Cursor Active */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
@@ -33,373 +30,288 @@
             line-height: 1.6;
         }
 
-        /* 1. CUSTOM INTERACTIVE CURSOR */
-        #cursor-dot {
-            width: 8px; height: 8px; background: var(--accent);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 10000; transition: transform 0.1s;
-        }
-        #cursor-outline {
-            width: 40px; height: 40px; border: 1px solid var(--accent);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9999; transition: transform 0.15s ease-out;
+        /* 1. HIGH-PERFORMANCE CURSOR CANVAS */
+        #cursor-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 10000;
         }
 
-        /* 2. BACKGROUND STARFIELD ENGINE */
         #bg-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none; opacity: 0.6;
+            z-index: -1; pointer-events: none; opacity: 0.4;
         }
 
-        /* 3. NAVIGATION (Glassmorphism) */
+        /* 2. NAVIGATION */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 25px 6%;
+            position: fixed; top: 0; width: 100%; padding: 20px 6%;
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(2, 2, 5, 0.8); backdrop-filter: blur(20px);
+            background: rgba(2, 2, 5, 0.85); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); z-index: 1000;
         }
-        .nav-logo {
-            font-family: 'Space Grotesk', sans-serif; font-weight: 900;
-            letter-spacing: 4px; color: #fff; text-decoration: none; font-size: 1.3rem;
-        }
-        .nav-links { display: flex; gap: 40px; }
-        .nav-links a {
-            color: var(--text-mid); text-decoration: none; font-size: 0.75rem;
-            font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-            position: relative; transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--accent); text-shadow: var(--glow); }
+        .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 900; letter-spacing: 3px; color: #fff; text-decoration: none; font-size: 1.2rem; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-mid); text-decoration: none; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* 4. HERO SECTION */
+        /* 3. HERO */
         #home {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            background: radial-gradient(circle at center, #0a182b 0%, var(--bg-ultra) 100%);
-            text-align: center; position: relative;
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #0a182b 0%, var(--bg-ultra) 100%); text-align: center;
         }
-        .logo-glow-wrap { position: relative; width: 90%; max-width: 600px; }
-        .logo-glow-wrap::before {
-            content: ''; position: absolute; inset: -20%;
-            background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15) 0%, transparent 70%);
-            filter: blur(50px); animation: pulse 4s infinite ease-in-out;
-        }
-        .fest-logo { width: 100%; height: auto; position: relative; animation: float 6s infinite ease-in-out; }
+        .fest-logo { width: 85%; max-width: 550px; filter: drop-shadow(0 0 30px rgba(0, 229, 255, 0.2)); animation: float 6s infinite ease-in-out; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.1); } }
 
-        /* 5. ABOUT SECTION & SCANNING TITLE */
-        .section { padding: 120px 8%; max-width: 1400px; margin: 0 auto; }
-        .glitch-box { position: relative; display: inline-block; padding: 20px 40px; margin-bottom: 50px; }
-        .glitch-title {
-            font-size: clamp(2.5rem, 8vw, 5rem); font-family: 'Space Grotesk', sans-serif;
-            font-weight: 900; text-transform: uppercase; color: #fff; position: relative;
-        }
-        .laser-line {
-            position: absolute; left: 0; width: 100%; height: 3px;
-            background: var(--accent); box-shadow: 0 0 15px var(--accent);
-            z-index: 10; animation: scan 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes scan { 0% { top: 0; opacity: 0; } 10%, 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-
-        /* 6. METRICS BAR (REFERENCE-STYLE INTERACTIVE) */
-        .metrics-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 25px; margin: 60px 0;
-        }
+        /* 4. METRICS (Reference Style) */
+        .section { padding: 100px 8%; max-width: 1400px; margin: 0 auto; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 50px 0; }
         .metric-card {
-            background: var(--glass); border: 1px solid var(--border);
-            border-radius: 20px; padding: 40px 20px; text-align: center;
-            backdrop-filter: blur(10px); transition: 0.4s var(--curve);
+            background: var(--glass); border: 1px solid var(--border); border-radius: 20px;
+            padding: 40px 20px; text-align: center; transition: 0.4s var(--curve);
         }
-        .metric-card:hover { border-color: var(--accent); transform: scale(1.05); background: rgba(var(--accent-rgb), 0.05); }
-        .metric-icon { width: 45px; height: 45px; fill: var(--accent); margin-bottom: 20px; }
-        .metric-num { font-size: 2.5rem; font-weight: 900; font-family: 'Space Grotesk'; display: block; }
+        .metric-card:hover { border-color: var(--accent); transform: translateY(-10px); background: rgba(var(--accent-rgb), 0.05); }
+        .metric-num { font-size: 2.5rem; font-weight: 900; font-family: 'Space Grotesk'; display: block; color: #fff; }
         .metric-label { font-size: 0.7rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 2px; }
 
-        /* 7. IOT HUB SECTION */
-        .iot-panel {
-            text-align: center; padding: 80px; border-radius: 40px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.02), transparent);
-            border: 1px solid var(--border); margin: 40px 0;
+        /* 5. AUTO-FIT MASONRY GALLERY */
+        .gallery-wrapper {
+            column-count: 3;
+            column-gap: 20px;
+            width: 100%;
         }
-        .status-light { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; }
-        .pulse-dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: blink 1s infinite; }
-
-        /* 8. PROFESSIONAL ASPECT-RATIO GALLERY */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            grid-auto-flow: dense; gap: 20px; margin-top: 50px;
-        }
-        .media-item {
-            position: relative; background: #000; border-radius: 20px;
-            overflow: hidden; border: 1px solid var(--border);
-            aspect-ratio: 16 / 10; cursor: pointer;
-        }
-        .media-item.featured { grid-column: span 2; grid-row: span 2; aspect-ratio: 16 / 12; }
-        .media-item.wide { grid-column: span 2; aspect-ratio: 21 / 9; }
-
-        .media-item img, .media-item video {
-            width: 100%; height: 100%; object-fit: cover;
-            object-position: center; transition: 0.8s var(--curve); opacity: 0.7;
-        }
-        .media-item:hover img, .media-item:hover video { transform: scale(1.08); opacity: 1; }
-
-        /* Video Controls Styling */
-        .video-ui {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            z-index: 5; transition: 0.4s; background: rgba(0,0,0,0.2);
-        }
-        .play-btn {
-            width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent);
-            background: rgba(var(--accent-rgb), 0.1); backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .play-btn::after {
-            content: ''; border-style: solid; border-width: 10px 0 10px 18px;
-            border-color: transparent transparent transparent var(--accent); margin-left: 5px;
-        }
-        .media-item:hover .video-ui { opacity: 0; transform: scale(1.2); }
-
-        /* 9. FOOTER SYSTEMS */
-        footer {
-            background: #000; border-top: 1px solid var(--border);
-            padding: 100px 8% 50px; margin-top: 150px;
-        }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px; }
-        .footer-logo { width: 160px; margin-bottom: 25px; filter: drop-shadow(var(--glow)); }
-        .footer-col h4 { font-size: 0.8rem; color: #fff; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; position: relative; }
-        .footer-col h4::after { content: ''; position: absolute; left: 0; bottom: -10px; width: 35px; height: 2px; background: var(--accent); }
-        .footer-col ul { list-style: none; }
-        .footer-col li { margin-bottom: 15px; color: var(--text-mid); font-size: 0.9rem; }
         
-        .reg-badge {
-            display: inline-flex; align-items: center; padding: 12px 20px;
-            background: rgba(255, 62, 62, 0.05); border: 1px solid rgba(255, 62, 62, 0.2);
-            border-radius: 12px; color: var(--accent-red); font-weight: 800; font-size: 0.75rem;
+        .media-box {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: 0.5s var(--curve);
         }
-        .red-dot { width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%; margin-right: 12px; animation: blink 1.5s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* REVEAL ON SCROLL */
-        .reveal { opacity: 0; transform: translateY(50px); transition: 1.2s var(--curve); }
+        .media-box img, .media-box video {
+            width: 100%;
+            display: block;
+            opacity: 0.75;
+            transition: 0.5s var(--curve);
+        }
+
+        .media-box:hover { border-color: var(--accent); transform: scale(1.02); z-index: 10; }
+        .media-box:hover img, .media-box:hover video { opacity: 1; }
+
+        /* Video Play Overlay */
+        .vid-indicator {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(var(--accent-rgb), 0.2);
+            padding: 5px 12px; border-radius: 20px; border: 1px solid var(--accent);
+            color: var(--accent); font-size: 0.6rem; font-weight: 900;
+            pointer-events: none; text-transform: uppercase;
+        }
+
+        /* 6. REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--curve); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 1024px) {
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-            .media-item.featured, .media-item.wide { grid-column: span 1; aspect-ratio: 1/1; }
-            * { cursor: auto; } #cursor-dot, #cursor-outline { display: none; }
-        }
+        footer { background: #000; border-top: 1px solid var(--border); padding: 80px 8% 40px; margin-top: 100px; }
+        .status-pill { display: inline-flex; align-items: center; padding: 10px 20px; border: 1px solid rgba(255, 62, 62, 0.3); border-radius: 8px; color: #ff3e3e; font-size: 0.75rem; font-weight: 700; }
+        .dot { width: 8px; height: 8px; background: #ff3e3e; border-radius: 50%; margin-right: 12px; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+        @media (max-width: 900px) { .gallery-wrapper { column-count: 2; } }
+        @media (max-width: 600px) { .gallery-wrapper { column-count: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
+    <canvas id="cursor-canvas"></canvas>
     <canvas id="bg-canvas"></canvas>
 
     <nav>
         <a href="#home" class="nav-logo">SYNAPTICS <span style="color:var(--accent)">2K26</span></a>
         <div class="nav-links">
             <a href="#home">Initiate</a>
-            <a href="#about">About</a>
             <a href="#metrics">Stats</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
+            <a href="#gallery">Media</a>
         </div>
     </nav>
 
     <section id="home">
-        <div class="logo-glow-wrap">
-            <img src="SYNAPTICS.png" alt="SYNAPTICS Logo" class="fest-logo">
-        </div>
-        <h2 style="font-family:'Space Grotesk'; letter-spacing:20px; font-weight:300; margin-top:40px; text-transform:uppercase;">2K26</h2>
-        <p style="color:var(--accent); letter-spacing:5px; font-size:0.75rem; margin-top:15px; text-transform:uppercase;">Innovate • Integrate • Inspire</p>
-    </section>
-
-    <section id="about" class="section">
-        <div class="glitch-box reveal">
-            <div class="laser-line"></div>
-            <h1 class="glitch-title">About Synaptics</h1>
-        </div>
-        <p class="reveal" style="color:var(--text-mid); font-size:1.1rem; max-width:900px; text-align:justify; margin-bottom: 40px;">
-            Synaptics 2K26 is the national-level flagship technical symposium of the <strong>Department of ECE, JNTUH UCES</strong>. It serves as a neural network for engineering minds, fostering innovation in VLSI, IoT, and Robotics.
-        </p>
+        <img src="SYNAPTICS.png" alt="SYNAPTICS" class="fest-logo">
+        <h2 style="font-family:'Space Grotesk'; letter-spacing:15px; margin-top:25px; font-weight:300;">2K26</h2>
     </section>
 
     <section id="metrics" class="section">
         <div class="metrics-grid">
             <div class="metric-card reveal">
-                <svg class="metric-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
                 <span class="metric-num" data-val="25">0</span>
                 <span class="metric-label">Premium Events</span>
             </div>
             <div class="metric-card reveal">
-                <svg class="metric-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                 <span class="metric-num" data-val="1500">0</span>
                 <span class="metric-label">Participants</span>
             </div>
             <div class="metric-card reveal">
-                <svg class="metric-icon" viewBox="0 0 24 24"><path d="M22 19H2V5h20v14zM4 7v10h16V7H4zm11 2h3v2h-3V9zm0 4h3v2h-3v-2z"></path></svg>
                 <span class="metric-num" data-val="20">0</span>
                 <span class="metric-label">Projects @ Expo</span>
             </div>
             <div class="metric-card reveal">
-                <svg class="metric-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <span class="metric-num" data-val="12">0</span>
-                <span class="metric-label">Tech Awards</span>
+                <span class="metric-label">Innovation Awards</span>
             </div>
-        </div>
-    </section>
-
-    <section id="iot" class="section">
-        <div class="iot-panel reveal">
-            <div class="status-light"><div class="pulse-dot"></div> IOT HUB: ACTIVE</div>
-            <h2 style="font-family:'Space Grotesk'; font-size:2.5rem; margin-top:20px;">NEURAL DATA SYNC</h2>
-            <p style="color:var(--text-mid); margin-top:10px;">Establishing connection to JNTUH Sultanpur ECE Nodes...</p>
         </div>
     </section>
 
     <section id="gallery" class="section">
         <h2 style="font-family:'Space Grotesk'; border-left: 4px solid var(--accent); padding-left: 20px; margin-bottom: 50px; text-transform: uppercase;">Media Hub</h2>
         
-        <div class="gallery-grid">
-            <div class="media-item featured reveal">
-                <div class="video-ui"><div class="play-btn"></div></div>
-                <video muted loop playsinline preload="auto">
+        <div class="gallery-wrapper">
+            <div class="media-box reveal">
+                <div class="vid-indicator">Video</div>
+                <video muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vid1.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-item reveal">
+            <div class="media-box reveal">
                 <img src="flashmob.jpeg" alt="Flashmob">
             </div>
 
-            <div class="media-item reveal">
-                <img src="goldenboys.jpeg" alt="Golden Boys">
+            <div class="media-box reveal">
+                <img src="goldenboys.jpeg" alt="Team">
             </div>
 
-            <div class="media-item reveal">
-                <div class="video-ui"><div class="play-btn"></div></div>
-                <video muted loop playsinline preload="auto">
+            <div class="media-box reveal">
+                <div class="vid-indicator">Video</div>
+                <video muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vid2.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-item reveal">
-                <img src="goldenmob.jpeg" alt="Golden Mob">
+            <div class="media-box reveal">
+                <img src="goldenmob.jpeg" alt="Crowd">
             </div>
 
-            <div class="media-item wide reveal">
-                <div class="video-ui"><div class="play-btn"></div></div>
-                <video muted loop playsinline preload="auto">
+            <div class="media-box reveal">
+                <div class="vid-indicator">Video</div>
+                <video muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vid3.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-item reveal">
-                <img src="stage.jpeg" alt="Synaptics Stage">
+            <div class="media-box reveal">
+                <img src="stage.jpeg" alt="Stage">
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <img src="SYNAPTICS.png" class="footer-logo">
-                <p>JNTUH University College of Engineering Sultanpur. Dept. of ECE.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Navigation</h4>
-                <ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#gallery">Media</a></li></ul>
-            </div>
-            <div class="footer-col">
-                <h4>Symposium</h4>
-                <ul><li>March 24-25, 2026</li><li>ECE Department</li><li>JNTUH Sultanpur</li></ul>
-            </div>
-            <div class="footer-col">
-                <h4>Node Status</h4>
-                <div class="reg-badge"><div class="red-dot"></div> REGISTRATION SOON</div>
-            </div>
-        </div>
+    <footer>
+        <div class="status-pill"><div class="dot"></div> REGISTRATION OPENING SOON</div>
+        <p style="color:var(--text-mid); font-size:0.7rem; margin-top:30px;">© 2026 SYNAPTICS | ECE DEPT JNTUH UCES</p>
     </footer>
 
     <script>
-        // 1. STARFIELD ENGINE
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
+        // --- STAR-SPARK CURSOR ENGINE ---
+        const cursorCanvas = document.getElementById('cursor-canvas');
+        const cctx = cursorCanvas.getContext('2d');
+        let particles = [];
 
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = Array.from({length: 120}, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2,
-                speed: Math.random() * 0.05 + 0.02
-            }));
+        function resize() {
+            cursorCanvas.width = window.innerWidth;
+            cursorCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+                this.color = `rgba(0, 229, 255, ${Math.random()})`;
+                this.life = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.02;
+            }
+            draw() {
+                cctx.fillStyle = this.color;
+                cctx.globalAlpha = this.life;
+                cctx.beginPath();
+                cctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                cctx.fill();
+            }
         }
 
-        function drawStars() {
-            ctx.clearRect(0,0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(255,255,255,0.8)";
-            stars.forEach(s => {
-                s.y -= s.speed;
-                if(s.y < 0) s.y = canvas.height;
-                ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(drawStars);
-        }
-
-        // 2. INTERACTIVE CURSOR ENGINE
-        const dot = document.getElementById('cursor-dot');
-        const outline = document.getElementById('cursor-outline');
         window.addEventListener('mousemove', (e) => {
-            dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-            outline.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+            for(let i=0; i<3; i++) {
+                particles.push(new Particle(e.clientX, e.clientY));
+            }
         });
 
-        // 3. COUNTER ENGINE
-        function runCounters() {
+        function animateParticles() {
+            cctx.clearRect(0,0, cursorCanvas.width, cursorCanvas.height);
+            for(let i=0; i<particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if(particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // --- BACKGROUND STARS ---
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bctx = bgCanvas.getContext('2d');
+        let stars = [];
+        function initStars() {
+            bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
+            stars = Array.from({length: 100}, () => ({ x: Math.random()*bgCanvas.width, y: Math.random()*bgCanvas.height, size: Math.random()*1.5, speed: Math.random()*0.05 + 0.02 }));
+        }
+        function drawStars() {
+            bctx.clearRect(0,0, bgCanvas.width, bgCanvas.height); bctx.fillStyle = "white";
+            stars.forEach(s => { s.y -= s.speed; if(s.y<0) s.y=bgCanvas.height; bctx.beginPath(); bctx.arc(s.x, s.y, s.size, 0, Math.PI*2); bctx.fill(); });
+            requestAnimationFrame(drawStars);
+        }
+        initStars(); drawStars();
+
+        // --- SCROLL REVEAL & COUNTERS ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if(e.isIntersecting) {
+                    e.target.classList.add('active');
+                    if(e.target.classList.contains('metrics-grid')) startCounters();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function startCounters() {
             document.querySelectorAll('.metric-num').forEach(num => {
+                if(num.innerText !== "0") return;
                 const target = +num.getAttribute('data-val');
                 let count = 0;
                 const update = () => {
-                    const inc = target / 50;
+                    const inc = target / 40;
                     if(count < target) {
                         count += inc;
-                        num.innerText = Math.ceil(count) + (target > 100 ? "+" : "+");
-                        requestAnimationFrame(update);
-                    } else { num.innerText = target + "+"; }
+                        num.innerText = Math.ceil(count) + "+";
+                        setTimeout(update, 30);
+                    } else num.innerText = target + "+";
                 };
                 update();
             });
         }
 
-        // 4. SCROLL & VIDEO ENGINE
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if(e.isIntersecting) {
-                    e.target.classList.add('active');
-                    if(e.target.classList.contains('metrics-grid')) runCounters();
-                }
-            });
-        }, { threshold: 0.1 });
-
-        // Hover to Play Video Logic
-        document.querySelectorAll('video').forEach(v => {
-            v.parentElement.addEventListener('mouseenter', () => v.play());
-            v.parentElement.addEventListener('mouseleave', () => v.pause());
-            v.addEventListener('click', () => { if(v.paused) v.play(); else v.pause(); });
-        });
-
-        window.addEventListener('resize', initStars);
-        document.addEventListener('DOMContentLoaded', () => {
-            initStars(); drawStars();
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-            observer.observe(document.querySelector('.metrics-grid'));
-        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        observer.observe(document.querySelector('.metrics-grid'));
     </script>
 </body>
 </html>
