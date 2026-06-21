@@ -177,8 +177,8 @@
             object-fit: contain;
         }
         
-        /* Updated tap zone width so it doesn't block iframe clicks */
-        .tap-zone { position: absolute; top: 0; height: 100%; width: 15%; z-index: 10; cursor: pointer; }
+        /* FIX: Tap zones moved up to avoid blocking video controls at the bottom of the screen */
+        .tap-zone { position: absolute; top: 5%; height: 80%; width: 20%; z-index: 10; cursor: pointer; }
         .tap-zone-left { left: 0; }
         .tap-zone-right { right: 0; }
 
