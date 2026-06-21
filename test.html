@@ -96,9 +96,9 @@
         .media-node:hover { border-color: var(--accent); transform: scale(1.03); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .media-node:hover img, .media-node:hover video { opacity: 1; }
         
-        .video-tag { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); text-transform: uppercase; pointer-events: none; }
+        .video-tag { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); text-transform: uppercase; pointer-events: none; z-index: 5; }
 
-        /* 9. FUTURISTIC LIGHTBOX (NEW) */
+        /* 9. FUTURISTIC LIGHTBOX */
         .lightbox {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(2, 2, 5, 0.95); backdrop-filter: blur(15px);
@@ -121,7 +121,6 @@
             box-shadow: 0 0 40px rgba(0, 229, 255, 0.1); border: 1px solid var(--border);
             object-fit: contain;
         }
-        /* Tap Zones for seamless clicking */
         .tap-zone { position: absolute; top: 0; height: 100%; width: 50%; z-index: 10; cursor: pointer; }
         .tap-zone-left { left: 0; }
         .tap-zone-right { right: 0; }
@@ -143,7 +142,6 @@
         .red-dot { width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%; margin-right: 12px; animation: blink-red 1.5s infinite; }
         @keyframes blink-red { 0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent-red); } 50% { opacity: 0.3; } }
 
-        /* ANIMATION REVEAL */
         .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--curve); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -155,7 +153,7 @@
             .footer-grid { grid-template-columns: 1fr; }
             .gallery-masonry { column-count: 1; }
             .nav-links { display: none; }
-            .lightbox-nav { display: none; /* Rely on tap zones on mobile */ }
+            .lightbox-nav { display: none; }
         }
     </style>
 </head>
@@ -167,8 +165,7 @@
     <div id="media-lightbox" class="lightbox">
         <div class="lightbox-close">&times;</div>
         <div class="lightbox-nav lightbox-prev">&#10094;</div>
-        <div class="lightbox-content-container">
-            </div>
+        <div class="lightbox-content-container"></div>
         <div class="lightbox-nav lightbox-next">&#10095;</div>
     </div>
 
@@ -232,10 +229,8 @@
         <h2 style="font-family:'Space Grotesk'; border-left: 4px solid var(--accent); padding-left: 20px; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 3px;">The Synapse Media Hub</h2>
         
         <div class="gallery-masonry">
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="banner.jpg">
-                <img src="banner.jpg" alt="Fest Banner">
-            </div>
-
+            
+            <!-- ORIGINAL MEDIA -->
             <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid1.mp4">
                 <div class="video-tag">Stage Cam</div>
                 <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
@@ -243,16 +238,12 @@
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="VPandPrincipalEntry.jpg">
-                <img src="VPandPrincipalEntry.jpg" alt="VP and Principal Entry">
-            </div>
-
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="flashmob.jpeg">
                 <img src="flashmob.jpeg" alt="Flashmob">
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cuttingribbon.jpg">
-                <img src="cuttingribbon.jpg" alt="Cutting Ribbon">
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
+                <img src="goldenboys.jpeg" alt="Team">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid2.mp4">
@@ -262,24 +253,8 @@
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
-                <img src="goldenboys.jpeg" alt="Team">
-            </div>
-            
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cakecutting.jpg">
-                <img src="cakecutting.jpg" alt="Cake Cutting">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp.HEIC">
-                <img src="MOBgrp.HEIC" alt="Mob Group 1">
-            </div>
-
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenmob.jpeg">
                 <img src="goldenmob.jpeg" alt="Event Crowd">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp2.HEIC">
-                <img src="MOBgrp2.HEIC" alt="Mob Group 2">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid3.mp4">
@@ -289,12 +264,37 @@
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="GaneshStage.HEIC">
-                <img src="GaneshStage.HEIC" alt="Ganesh Stage">
-            </div>
-
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="stage.jpeg">
                 <img src="stage.jpeg" alt="Main Stage">
+            </div>
+
+            <!-- NEWLY ADDED MEDIA -->
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="banner.jpg">
+                <img src="banner.jpg" alt="Banner">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="VPandPrincipalEntry.jpg">
+                <img src="VPandPrincipalEntry.jpg" alt="VP and Principal Entry">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cuttingribbon.jpg">
+                <img src="cuttingribbon.jpg" alt="Cutting Ribbon">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cakecutting.jpg">
+                <img src="cakecutting.jpg" alt="Cake Cutting">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp.HEIC">
+                <img src="MOBgrp.HEIC" alt="Mob Group 1">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp2.HEIC">
+                <img src="MOBgrp2.HEIC" alt="Mob Group 2">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="GaneshStage.HEIC">
+                <img src="GaneshStage.HEIC" alt="Ganesh Stage">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3353.JPG">
@@ -312,6 +312,7 @@
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3841.HEIC">
                 <img src="IMG_3841.HEIC" alt="Event Image 3841">
             </div>
+
         </div>
     </section>
 
@@ -454,7 +455,6 @@
         
         let currentIdx = 0;
         
-        // Map DOM elements to an array for easy state management
         const mediaList = Array.from(triggers).map(t => ({
             src: t.getAttribute('data-src'),
             type: t.getAttribute('data-type')
@@ -464,13 +464,13 @@
             currentIdx = idx;
             renderMedia();
             lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Stop background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeLightbox() {
             lightbox.classList.remove('active');
-            lbContainer.innerHTML = ''; // Kill video streams
-            document.body.style.overflow = 'auto'; // Restore scroll
+            lbContainer.innerHTML = ''; 
+            document.body.style.overflow = 'auto'; 
         }
 
         function renderMedia() {
@@ -481,7 +481,7 @@
             if(item.type === 'video') {
                 el = document.createElement('video');
                 el.src = item.src;
-                el.controls = true; // Modern native controls active inside lightbox
+                el.controls = true; 
                 el.autoplay = true;
                 el.playsinline = true;
             } else {
@@ -489,7 +489,6 @@
                 el.src = item.src;
             }
             
-            // Create Invisible Tap Zones
             const leftZone = document.createElement('div');
             leftZone.className = 'tap-zone tap-zone-left';
             leftZone.onclick = prevMedia;
@@ -506,22 +505,18 @@
         function nextMedia(e) { if(e) e.stopPropagation(); currentIdx = (currentIdx + 1) % mediaList.length; renderMedia(); }
         function prevMedia(e) { if(e) e.stopPropagation(); currentIdx = (currentIdx - 1 + mediaList.length) % mediaList.length; renderMedia(); }
 
-        // Bind clicks to gallery nodes
         triggers.forEach((t, i) => {
             t.addEventListener('click', () => openLightbox(i));
         });
 
-        // Event Listeners for Lightbox Nav
         lbClose.onclick = closeLightbox;
         lbNext.onclick = nextMedia;
         lbPrev.onclick = prevMedia;
         
-        // Click outside media to close
         lightbox.addEventListener('click', (e) => {
             if(e.target === lightbox) closeLightbox();
         });
 
-        // Keyboard Support (Arrows & Esc)
         document.addEventListener('keydown', (e) => {
             if(!lightbox.classList.contains('active')) return;
             if(e.key === 'ArrowRight') nextMedia();
