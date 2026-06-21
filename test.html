@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPTICS 2K26 | ECE JNTUH UCES</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        :root {
+            --bg-ultra: #020205;
+            --bg-panel: #050508;
+            --accent: #00e5ff;
+            --accent-rgb: 0, 229, 255;
+            --accent-red: #ff3e3e;
+            --text-high: #ffffff;
+            --text-mid: #a0a0a0;
+            --text-low: #606060;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
+            --curve: cubic-bezier(0.19, 1, 0.22, 1);
+            --glow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-ultra);
+            color: var(--text-high);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 1. STARDUST CURSOR CANVAS */
+        #cursor-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 10000;
+        }
+
+        /* 2. BACKGROUND ENGINE */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; opacity: 0.5;
+        }
+
+        /* 3. NAVIGATION */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 25px 6%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(2, 2, 5, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); z-index: 1000;
+        }
+        .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 900; letter-spacing: 4px; color: #fff; text-decoration: none; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: var(--text-mid); text-decoration: none; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent); text-shadow: var(--glow); }
+
+        /* 4. HERO SECTION */
+        #home {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #0a182b 0%, var(--bg-ultra) 100%); text-align: center;
+        }
+        .fest-logo { width: 90%; max-width: 580px; filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.2)); animation: float 6s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* 5. ABOUT & SCANNER */
+        .section { padding: 120px 8%; max-width: 1400px; margin: 0 auto; }
+        .glitch-box { position: relative; display: inline-block; padding: 20px 0; margin-bottom: 50px; }
+        .glitch-title { font-size: clamp(2.5rem, 8vw, 5rem); font-family: 'Space Grotesk', sans-serif; font-weight: 900; text-transform: uppercase; color: #fff; }
+        .laser-line { position: absolute; left: 0; width: 100%; height: 3px; background: var(--accent); box-shadow: 0 0 15px var(--accent); z-index: 10; animation: scan 4s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes scan { 0% { top: 0; opacity: 0; } 10%, 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+        /* 6. METRICS */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin: 60px 0; }
+        .metric-card { background: var(--glass); border: 1px solid var(--border); border-radius: 24px; padding: 50px 20px; text-align: center; backdrop-filter: blur(10px); transition: 0.4s var(--curve); }
+        .metric-card:hover { border-color: var(--accent); transform: translateY(-10px); background: rgba(var(--accent-rgb), 0.05); }
+        .metric-num { font-size: 2.8rem; font-weight: 900; font-family: 'Space Grotesk'; display: block; color: #fff; }
+        .metric-label { font-size: 0.75rem; color: var(--text-mid); text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
+
+        /* 7. IOT HUB PANEL */
+        .iot-hub-container {
+            background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border: 1px solid var(--border); border-radius: 40px; padding: 80px 40px; text-align: center; margin: 60px 0;
+        }
+        .status-badge { display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px; background: rgba(var(--accent-rgb), 0.1); border: 1px solid var(--accent); border-radius: 100px; color: var(--accent); font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; }
+        .pulse-circle { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse-blink 1s infinite; }
+        @keyframes pulse-blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
+
+        /* 8. MASONRY GALLERY */
+        .gallery-masonry { column-count: 3; column-gap: 25px; width: 100%; margin-top: 50px; }
+        .media-node { display: inline-block; width: 100%; margin-bottom: 25px; border-radius: 24px; overflow: hidden; background: #000; border: 1px solid var(--border); position: relative; transition: 0.5s var(--curve); cursor: pointer; }
+        .media-node img, .media-node video { width: 100%; height: auto; display: block; opacity: 0.8; transition: 0.6s var(--curve); }
+        .media-node:hover { border-color: var(--accent); transform: scale(1.03); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .media-node:hover img, .media-node:hover video { opacity: 1; }
+        
+        .video-tag { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); text-transform: uppercase; pointer-events: none; }
+
+        /* 9. FUTURISTIC LIGHTBOX (NEW) */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 2, 5, 0.95); backdrop-filter: blur(15px);
+            z-index: 99999; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s var(--curve);
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+        
+        .lightbox-close { position: absolute; top: 30px; right: 40px; font-size: 3rem; color: var(--text-mid); cursor: pointer; transition: 0.3s; z-index: 100000; font-family: 'Inter'; }
+        .lightbox-close:hover { color: var(--accent); text-shadow: var(--glow); transform: scale(1.1); }
+        
+        .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2.5rem; color: rgba(255,255,255,0.3); cursor: pointer; padding: 20px; transition: 0.3s; z-index: 100000; user-select: none; }
+        .lightbox-nav:hover { color: var(--accent); text-shadow: var(--glow); }
+        .lightbox-prev { left: 2vw; }
+        .lightbox-next { right: 2vw; }
+        
+        .lightbox-content-container { position: relative; max-width: 85vw; max-height: 85vh; display: flex; justify-content: center; align-items: center; }
+        .lightbox-content-container img, .lightbox-content-container video {
+            max-width: 100%; max-height: 85vh; border-radius: 12px;
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.1); border: 1px solid var(--border);
+            object-fit: contain;
+        }
+        /* Tap Zones for seamless clicking */
+        .tap-zone { position: absolute; top: 0; height: 100%; width: 50%; z-index: 10; cursor: pointer; }
+        .tap-zone-left { left: 0; }
+        .tap-zone-right { right: 0; }
+
+        /* 10. FOOTER */
+        footer { background: #000; border-top: 1px solid var(--border); padding: 100px 8% 50px; margin-top: 150px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px; }
+        .footer-brand img { width: 170px; margin-bottom: 25px; filter: drop-shadow(var(--glow)); }
+        .footer-brand p { color: var(--text-mid); font-size: 0.9rem; max-width: 320px; }
+        
+        .footer-col h4 { font-size: 0.85rem; color: #fff; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 35px; position: relative; }
+        .footer-col h4::after { content: ''; position: absolute; left: 0; bottom: -12px; width: 40px; height: 2px; background: var(--accent); }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 18px; color: var(--text-mid); font-size: 0.9rem; }
+        .footer-col a { color: var(--text-mid); text-decoration: none; transition: 0.3s; }
+        .footer-col a:hover { color: var(--accent); padding-left: 8px; }
+
+        .reg-status { display: inline-flex; align-items: center; padding: 14px 22px; background: rgba(255, 62, 62, 0.05); border: 1px solid rgba(255, 62, 62, 0.2); border-radius: 14px; color: var(--accent-red); font-weight: 800; font-size: 0.75rem; }
+        .red-dot { width: 8px; height: 8px; background: var(--accent-red); border-radius: 50%; margin-right: 12px; animation: blink-red 1.5s infinite; }
+        @keyframes blink-red { 0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent-red); } 50% { opacity: 0.3; } }
+
+        /* ANIMATION REVEAL */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--curve); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 1024px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .gallery-masonry { column-count: 2; }
+        }
+        @media (max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; }
+            .gallery-masonry { column-count: 1; }
+            .nav-links { display: none; }
+            .lightbox-nav { display: none; /* Rely on tap zones on mobile */ }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="cursor-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="media-lightbox" class="lightbox">
+        <div class="lightbox-close">&times;</div>
+        <div class="lightbox-nav lightbox-prev">&#10094;</div>
+        <div class="lightbox-content-container">
+            </div>
+        <div class="lightbox-nav lightbox-next">&#10095;</div>
+    </div>
+
+    <nav>
+        <a href="#home" class="nav-logo">SYNAPTICS <span style="color:var(--accent)">2K26</span></a>
+        <div class="nav-links">
+            <a href="#home">Initiate</a>
+            <a href="#about">About</a>
+            <a href="#metrics">Stats</a>
+            <a href="#gallery">Media</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <img src="SYNAPTICS.png" alt="SYNAPTICS" class="fest-logo">
+        <h2 style="font-family:'Space Grotesk'; letter-spacing:20px; margin-top:35px; font-weight:300; text-transform:uppercase;">2K26</h2>
+        <p style="color:var(--text-mid); font-size:0.7rem; letter-spacing:6px; margin-top:20px; text-transform:uppercase;">Dept of ECE • JNTUH UCES</p>
+    </section>
+
+    <section id="about" class="section">
+        <div class="glitch-box reveal">
+            <div class="laser-line"></div>
+            <h1 class="glitch-title">Neural Overview</h1>
+        </div>
+        <p class="reveal" style="color:var(--text-mid); font-size:1.15rem; max-width:900px; text-align:justify;">
+            Synaptics 2K26 is the national-level flagship technical symposium of the <strong style="color:#fff">Dept. of Electronics and Communication Engineering, JNTUH UCES</strong>. It is a catalyst for technical disruption, designed to bridge the gap between abstract neural concepts and silicon reality.
+        </p>
+    </section>
+
+    <section id="metrics" class="section">
+        <div class="metrics-grid">
+            <div class="metric-card reveal">
+                <span class="metric-num" data-val="25">0</span>
+                <span class="metric-label">Premium Events</span>
+            </div>
+            <div class="metric-card reveal">
+                <span class="metric-num" data-val="1500">0</span>
+                <span class="metric-label">Participants</span>
+            </div>
+            <div class="metric-card reveal">
+                <span class="metric-num" data-val="20">0</span>
+                <span class="metric-label">Projects @ Expo</span>
+            </div>
+            <div class="metric-card reveal">
+                <span class="metric-num" data-val="12">0</span>
+                <span class="metric-label">Innovation Awards</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="iot" class="section">
+        <div class="iot-hub-container reveal">
+            <div class="status-badge"><div class="pulse-circle"></div> IOT HUB NODE: CONNECTED</div>
+            <h2 style="font-family:'Space Grotesk'; font-size:2.8rem; margin:30px 0 15px; text-transform:uppercase;">Data Synchronization</h2>
+            <p style="color:var(--text-mid); font-weight:300;">Real-time symposium telemetry active. Syncing JNTUH Sultanpur ECE Nodes...</p>
+        </div>
+    </section>
+
+    <section id="gallery" class="section">
+        <h2 style="font-family:'Space Grotesk'; border-left: 4px solid var(--accent); padding-left: 20px; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 3px;">The Synapse Media Hub</h2>
+        
+        <div class="gallery-masonry">
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="banner.jpg">
+                <img src="banner.jpg" alt="Fest Banner">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid1.mp4">
+                <div class="video-tag">Stage Cam</div>
+                <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="vid1.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="VPandPrincipalEntry.jpg">
+                <img src="VPandPrincipalEntry.jpg" alt="VP and Principal Entry">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="flashmob.jpeg">
+                <img src="flashmob.jpeg" alt="Flashmob">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cuttingribbon.jpg">
+                <img src="cuttingribbon.jpg" alt="Cutting Ribbon">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid2.mp4">
+                <div class="video-tag">B-Roll</div>
+                <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="vid2.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
+                <img src="goldenboys.jpeg" alt="Team">
+            </div>
+            
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cakecutting.jpg">
+                <img src="cakecutting.jpg" alt="Cake Cutting">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp.HEIC">
+                <img src="MOBgrp.HEIC" alt="Mob Group 1">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenmob.jpeg">
+                <img src="goldenmob.jpeg" alt="Event Crowd">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp2.HEIC">
+                <img src="MOBgrp2.HEIC" alt="Mob Group 2">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid3.mp4">
+                <div class="video-tag">Highlights</div>
+                <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="vid3.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="GaneshStage.HEIC">
+                <img src="GaneshStage.HEIC" alt="Ganesh Stage">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="stage.jpeg">
+                <img src="stage.jpeg" alt="Main Stage">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3353.JPG">
+                <img src="IMG_3353.JPG" alt="Event Image 3353">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3696.JPG">
+                <img src="IMG_3696.JPG" alt="Event Image 3696">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3840.HEIC">
+                <img src="IMG_3840.HEIC" alt="Event Image 3840">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3841.HEIC">
+                <img src="IMG_3841.HEIC" alt="Event Image 3841">
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="SYNAPTICS.png" alt="Footer Logo">
+                <p>The premier National Level Symposium driving innovation in Electronics since 2012. Dept. of ECE, JNTUH UCES Sultanpur.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#home">Initiate</a></li>
+                    <li><a href="#about">Overview</a></li>
+                    <li><a href="#gallery">Media Hub</a></li>
+                    <li><a href="#iot">IoT Node</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Node Info</h4>
+                <ul>
+                    <li><strong>Dates:</strong> March 24-25, 2026</li>
+                    <li><strong>Venue:</strong> JNTUH Sultanpur</li>
+                    <li><strong>Organized:</strong> ECE Wing</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Connection</h4>
+                <div class="reg-status">
+                    <div class="red-dot"></div> REGISTRATION SOON
+                </div>
+                <p style="margin-top:25px; font-size:0.75rem; color:var(--text-low);">Follow our neural pathways for real-time updates.</p>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border); margin-top: 60px; padding-top: 30px; display: flex; justify-content: space-between; align-items: center; color: var(--text-low); font-size: 0.75rem;">
+            <p>© 2026 SYNAPTICS | ECE DEPARTMENT JNTUH UCES. ALL RIGHTS RESERVED.</p>
+            <p>SULTANPUR, TELANGANA</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. HIGH-SPEED STARDUST CURSOR (GPU OPTIMIZED)
+        const cCanvas = document.getElementById('cursor-canvas');
+        const cctx = cCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeCursor() {
+            cCanvas.width = window.innerWidth;
+            cCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCursor);
+        resizeCursor();
+
+        class Spark {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.size = Math.random() * 2 + 0.5;
+                this.vX = (Math.random() - 0.5) * 1.5;
+                this.vY = (Math.random() - 0.5) * 1.5;
+                this.life = 1;
+            }
+            draw() {
+                cctx.fillStyle = `rgba(0, 229, 255, ${this.life})`;
+                cctx.beginPath();
+                cctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                cctx.fill();
+            }
+            update() {
+                this.x += this.vX; this.y += this.vY;
+                this.life -= 0.02;
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            for(let i=0; i<4; i++) particles.push(new Spark(e.clientX, e.clientY));
+        });
+
+        function animateSparks() {
+            cctx.clearRect(0,0, cCanvas.width, cCanvas.height);
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateSparks);
+        }
+        animateSparks();
+
+        // 2. BACKGROUND STARFIELD
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bctx = bgCanvas.getContext('2d');
+        let stars = [];
+        function initStars() {
+            bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
+            stars = Array.from({length: 120}, () => ({ x: Math.random()*bgCanvas.width, y: Math.random()*bgCanvas.height, size: Math.random()*1.5, speed: Math.random()*0.06 + 0.02 }));
+        }
+        function drawStars() {
+            bctx.clearRect(0,0, bgCanvas.width, bgCanvas.height); bctx.fillStyle = "white";
+            stars.forEach(s => { s.y -= s.speed; if(s.y<0) s.y=bgCanvas.height; bctx.beginPath(); bctx.arc(s.x, s.y, s.size, 0, Math.PI*2); bctx.fill(); });
+            requestAnimationFrame(drawStars);
+        }
+        initStars(); drawStars();
+
+        // 3. OBSERVER & COUNTERS
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if(e.isIntersecting) {
+                    e.target.classList.add('active');
+                    if(e.target.classList.contains('metrics-grid')) startCounters();
+                }
+            });
+        }, { threshold: 0.15 });
+
+        function startCounters() {
+            document.querySelectorAll('.metric-num').forEach(num => {
+                if(num.getAttribute('data-active') === "true") return;
+                num.setAttribute('data-active', "true");
+                const target = +num.getAttribute('data-val');
+                let cur = 0;
+                const step = () => {
+                    const inc = target / 40;
+                    if(cur < target) { cur += inc; num.innerText = Math.ceil(cur) + "+"; requestAnimationFrame(step); }
+                    else num.innerText = target + "+";
+                };
+                step();
+            });
+        }
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        observer.observe(document.querySelector('.metrics-grid'));
+
+        // 4. FUTURISTIC LIGHTBOX CONTROLLER
+        const triggers = document.querySelectorAll('.lightbox-trigger');
+        const lightbox = document.getElementById('media-lightbox');
+        const lbContainer = document.querySelector('.lightbox-content-container');
+        const lbClose = document.querySelector('.lightbox-close');
+        const lbNext = document.querySelector('.lightbox-next');
+        const lbPrev = document.querySelector('.lightbox-prev');
+        
+        let currentIdx = 0;
+        
+        // Map DOM elements to an array for easy state management
+        const mediaList = Array.from(triggers).map(t => ({
+            src: t.getAttribute('data-src'),
+            type: t.getAttribute('data-type')
+        }));
+
+        function openLightbox(idx) {
+            currentIdx = idx;
+            renderMedia();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lbContainer.innerHTML = ''; // Kill video streams
+            document.body.style.overflow = 'auto'; // Restore scroll
+        }
+
+        function renderMedia() {
+            const item = mediaList[currentIdx];
+            lbContainer.innerHTML = ''; 
+            
+            let el;
+            if(item.type === 'video') {
+                el = document.createElement('video');
+                el.src = item.src;
+                el.controls = true; // Modern native controls active inside lightbox
+                el.autoplay = true;
+                el.playsinline = true;
+            } else {
+                el = document.createElement('img');
+                el.src = item.src;
+            }
+            
+            // Create Invisible Tap Zones
+            const leftZone = document.createElement('div');
+            leftZone.className = 'tap-zone tap-zone-left';
+            leftZone.onclick = prevMedia;
+            
+            const rightZone = document.createElement('div');
+            rightZone.className = 'tap-zone tap-zone-right';
+            rightZone.onclick = nextMedia;
+            
+            lbContainer.appendChild(el);
+            lbContainer.appendChild(leftZone);
+            lbContainer.appendChild(rightZone);
+        }
+
+        function nextMedia(e) { if(e) e.stopPropagation(); currentIdx = (currentIdx + 1) % mediaList.length; renderMedia(); }
+        function prevMedia(e) { if(e) e.stopPropagation(); currentIdx = (currentIdx - 1 + mediaList.length) % mediaList.length; renderMedia(); }
+
+        // Bind clicks to gallery nodes
+        triggers.forEach((t, i) => {
+            t.addEventListener('click', () => openLightbox(i));
+        });
+
+        // Event Listeners for Lightbox Nav
+        lbClose.onclick = closeLightbox;
+        lbNext.onclick = nextMedia;
+        lbPrev.onclick = prevMedia;
+        
+        // Click outside media to close
+        lightbox.addEventListener('click', (e) => {
+            if(e.target === lightbox) closeLightbox();
+        });
+
+        // Keyboard Support (Arrows & Esc)
+        document.addEventListener('keydown', (e) => {
+            if(!lightbox.classList.contains('active')) return;
+            if(e.key === 'ArrowRight') nextMedia();
+            if(e.key === 'ArrowLeft') prevMedia();
+            if(e.key === 'Escape') closeLightbox();
+        });
+
+    </script>
+</body>
+</html>
