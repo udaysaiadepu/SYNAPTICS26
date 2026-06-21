@@ -177,8 +177,8 @@
             object-fit: contain;
         }
         
-        /* FIX: Tap zones moved up to avoid blocking video controls at the bottom of the screen */
-        .tap-zone { position: absolute; top: 5%; height: 80%; width: 20%; z-index: 10; cursor: pointer; }
+        /* FIX V3: Drastically reduced tap zones to avoid the timeline and bottom-right settings gear */
+        .tap-zone { position: absolute; top: 10%; height: 65%; width: 12%; z-index: 10; cursor: pointer; }
         .tap-zone-left { left: 0; }
         .tap-zone-right { right: 0; }
 
