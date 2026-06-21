@@ -89,12 +89,12 @@
         .pulse-circle { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse-blink 1s infinite; }
         @keyframes pulse-blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
 
-        /* 8. DYNAMIC BENTO GALLERY (PORTRAIT UPGRADE) */
+        /* 8. DYNAMIC BENTO GALLERY */
         .gallery-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            grid-auto-rows: 250px; /* Base height for all cards */
-            grid-auto-flow: dense; /* Fills empty gaps beautifully */
+            grid-auto-rows: 250px; 
+            grid-auto-flow: dense; 
             gap: 20px; 
             width: 100%; 
             margin-top: 50px; 
@@ -109,15 +109,17 @@
             transition: 0.5s var(--curve); 
             height: 100%;
             width: 100%;
+            display: flex; /* Helps center non-cropped images */
+            justify-content: center;
+            align-items: center;
         }
         
         /* Grid Spans for Bento Effect */
         .media-node.span-wide { grid-column: span 2; }
-        .media-node.span-tall { grid-row: span 2; } /* Perfect for portrait images */
+        .media-node.span-tall { grid-row: span 2; } 
 
         @media (max-width: 768px) { 
             .media-node.span-wide { grid-column: span 1; } 
-            /* Portraits stay tall on mobile naturally */
         }
 
         /* Image & Video Formatting */
@@ -128,6 +130,12 @@
             opacity: 0.65; 
             filter: grayscale(30%);
             transition: 0.6s var(--curve); 
+        }
+
+        /* NEW: NO CROP CLASS */
+        .media-node.no-crop img {
+            object-fit: contain; /* Shows full image, no zoom */
+            padding: 10px; /* Optional slight breathing room */
         }
 
         /* Hover Overlay & Interactions */
@@ -145,7 +153,6 @@
         .media-node:hover img, .media-node:hover video { opacity: 1; filter: grayscale(0%); transform: scale(1.05); }
         .media-node:hover .media-overlay { opacity: 1; transform: translateY(0); }
         
-        /* Video Tags styled as professional badges */
         .video-badge { position: absolute; top: 15px; right: 15px; background: rgba(0, 229, 255, 0.1); backdrop-filter: blur(10px); color: var(--accent); font-size: 0.6rem; font-weight: 800; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(0, 229, 255, 0.3); text-transform: uppercase; pointer-events: none; z-index: 15; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
         .video-badge::before { content: ''; display: block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
 
@@ -281,7 +288,7 @@
         
         <div class="gallery-grid">
             
-            <div class="media-node reveal lightbox-trigger span-wide" data-type="image" data-src="Banner.jpg">
+            <div class="media-node reveal lightbox-trigger span-wide no-crop" data-type="image" data-src="Banner.jpg">
                 <div class="media-overlay">
                     <span class="overlay-title">Symposium Banner</span>
                     <span class="overlay-subtitle">Inauguration</span>
@@ -345,7 +352,7 @@
                 <img src="MOBgrp2.jpg" alt="Mob Group 2">
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
+            <div class="media-node reveal lightbox-trigger no-crop" data-type="image" data-src="goldenboys.jpeg">
                 <div class="media-overlay">
                     <span class="overlay-title">The Team</span>
                     <span class="overlay-subtitle">Organization</span>
@@ -369,15 +376,12 @@
                 <img src="GaneshStage.jpg" alt="Ganesh Stage">
             </div>
 
-            <div class="media-node reveal lightbox-trigger span-wide" data-type="video" data-src="vid1.mp4">
-                <div class="video-badge">Stage Cam</div>
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="image" data-src="IMG_3353.JPG">
                 <div class="media-overlay">
                     <span class="overlay-title">Stage Perspective</span>
                     <span class="overlay-subtitle">Live View</span>
                 </div>
-                <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
-                    <source src="vid1.mp4" type="video/mp4">
-                </video>
+                <img src="IMG_3353.JPG" alt="Event Image 3353">
             </div>
 
             <div class="media-node reveal lightbox-trigger span-wide" data-type="video" data-src="vid2.mp4">
@@ -391,29 +395,10 @@
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vi3.mp4">
-                <div class="video-badge">Highlights</div>
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3696.JPG">
                 <div class="media-overlay">
                     <span class="overlay-title">Event Recap</span>
                     <span class="overlay-subtitle">Highlights</span>
-                </div>
-                <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
-                    <source src="vi3.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <div class="media-node reveal lightbox-trigger span-tall" data-type="image" data-src="IMG_3353.JPG">
-                <div class="media-overlay">
-                    <span class="overlay-title">Candid Shot 1</span>
-                    <span class="overlay-subtitle">Archives</span>
-                </div>
-                <img src="IMG_3353.JPG" alt="Event Image 3353">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger span-tall" data-type="image" data-src="IMG_3696.JPG">
-                <div class="media-overlay">
-                    <span class="overlay-title">Candid Shot 2</span>
-                    <span class="overlay-subtitle">Archives</span>
                 </div>
                 <img src="IMG_3696.JPG" alt="Event Image 3696">
             </div>
