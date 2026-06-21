@@ -168,12 +168,17 @@
         .lightbox-next { right: 2vw; }
         
         .lightbox-content-container { position: relative; max-width: 85vw; max-height: 85vh; display: flex; justify-content: center; align-items: center; }
-        .lightbox-content-container img, .lightbox-content-container video {
+        
+        .lightbox-content-container img, 
+        .lightbox-content-container video, 
+        .lightbox-content-container iframe {
             max-width: 100%; max-height: 85vh; border-radius: 12px;
             box-shadow: 0 0 40px rgba(0, 229, 255, 0.1); border: 1px solid var(--border);
             object-fit: contain;
         }
-        .tap-zone { position: absolute; top: 0; height: 100%; width: 50%; z-index: 10; cursor: pointer; }
+        
+        /* Updated tap zone width so it doesn't block iframe clicks */
+        .tap-zone { position: absolute; top: 0; height: 100%; width: 15%; z-index: 10; cursor: pointer; }
         .tap-zone-left { left: 0; }
         .tap-zone-right { right: 0; }
 
@@ -321,6 +326,7 @@
                 </div>
                 <img src="workshop.jpeg" alt="Workshop">
             </div>
+
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="workshop2.jpeg">
                 <div class="media-overlay">
                     <span class="overlay-title">Workshop</span>
@@ -328,7 +334,8 @@
                 </div>
                 <img src="workshop2.jpeg" alt="Workshop">
             </div>
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="workshopteam.jpeg">
+
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="image" data-src="workshopteam.jpeg">
                 <div class="media-overlay">
                     <span class="overlay-title">Workshop Volunteers and Team</span>
                     <span class="overlay-subtitle">Campus Life</span>
@@ -336,12 +343,13 @@
                 <img src="workshopteam.jpeg" alt="Workshop team">
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="flashmob.jpeg">
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="iframe" data-src="https://drive.google.com/file/d/1yBIlVlblgMGjDSWPz0XxZwCG6xJ-UTYB/preview">
+                <div class="video-badge">Full Video</div>
                 <div class="media-overlay">
-                    <span class="overlay-title">Flashmob Energy</span>
-                    <span class="overlay-subtitle">Campus Life</span>
+                    <span class="overlay-title">Flashmob Full Video</span>
+                    <span class="overlay-subtitle">Watch Now</span>
                 </div>
-                <img src="flashmob.jpeg" alt="Flashmob">
+                <img src="flashmob.jpeg" alt="Flashmob Full Video">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenmob.jpeg">
@@ -575,7 +583,7 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         observer.observe(document.querySelector('.metrics-grid'));
 
-        // 4. FUTURISTIC LIGHTBOX CONTROLLER
+        // 4. FUTURISTIC LIGHTBOX CONTROLLER (UPDATED FOR IFRAMES)
         const triggers = document.querySelectorAll('.lightbox-trigger');
         const lightbox = document.getElementById('media-lightbox');
         const lbContainer = document.querySelector('.lightbox-content-container');
@@ -614,6 +622,16 @@
                 el.controls = true; 
                 el.autoplay = true;
                 el.playsinline = true;
+            } else if (item.type === 'iframe') {
+                el = document.createElement('iframe');
+                el.src = item.src;
+                el.allow = "autoplay";
+                el.style.width = "85vw";
+                el.style.height = "85vh";
+                el.style.maxWidth = "100%";
+                el.style.border = "none";
+                el.style.borderRadius = "12px";
+                el.style.boxShadow = "0 0 40px rgba(0, 229, 255, 0.1)";
             } else {
                 el = document.createElement('img');
                 el.src = item.src;
