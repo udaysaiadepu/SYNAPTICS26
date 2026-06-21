@@ -89,14 +89,57 @@
         .pulse-circle { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse-blink 1s infinite; }
         @keyframes pulse-blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
 
-        /* 8. MASONRY GALLERY */
-        .gallery-masonry { column-count: 3; column-gap: 25px; width: 100%; margin-top: 50px; }
-        .media-node { display: inline-block; width: 100%; margin-bottom: 25px; border-radius: 24px; overflow: hidden; background: #000; border: 1px solid var(--border); position: relative; transition: 0.5s var(--curve); cursor: pointer; }
-        .media-node img, .media-node video { width: 100%; height: auto; display: block; opacity: 0.8; transition: 0.6s var(--curve); }
-        .media-node:hover { border-color: var(--accent); transform: scale(1.03); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .media-node:hover img, .media-node:hover video { opacity: 1; }
+        /* 8. PROFESSIONAL BENTO GALLERY (REMODELED) */
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 20px; 
+            width: 100%; 
+            margin-top: 50px; 
+        }
+        .media-node { 
+            position: relative; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            background: var(--bg-panel); 
+            border: 1px solid var(--border); 
+            aspect-ratio: 4/3; 
+            cursor: pointer; 
+            transition: 0.5s var(--curve); 
+        }
         
-        .video-tag { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); color: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); text-transform: uppercase; pointer-events: none; z-index: 5; }
+        /* Grid Spans for Bento Effect */
+        .media-node.span-wide { grid-column: span 2; aspect-ratio: 24/9; }
+        @media (max-width: 768px) { .media-node.span-wide { grid-column: span 1; aspect-ratio: 4/3; } }
+
+        /* Image & Video Formatting */
+        .media-node img, .media-node video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Ensures uniformity */
+            opacity: 0.65; 
+            filter: grayscale(30%);
+            transition: 0.6s var(--curve); 
+        }
+
+        /* Hover Overlay & Interactions */
+        .media-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 25px; opacity: 0; transform: translateY(10px);
+            transition: 0.4s var(--curve); z-index: 10; pointer-events: none;
+        }
+        .overlay-title { font-family: 'Space Grotesk'; font-size: 1.1rem; font-weight: 700; color: #fff; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .overlay-subtitle { font-size: 0.7rem; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+
+        .media-node:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,229,255,0.15); z-index: 20; }
+        .media-node:hover img, .media-node:hover video { opacity: 1; filter: grayscale(0%); transform: scale(1.05); }
+        .media-node:hover .media-overlay { opacity: 1; transform: translateY(0); }
+        
+        /* Video Tags styled as professional badges */
+        .video-badge { position: absolute; top: 15px; right: 15px; background: rgba(0, 229, 255, 0.1); backdrop-filter: blur(10px); color: var(--accent); font-size: 0.6rem; font-weight: 800; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(0, 229, 255, 0.3); text-transform: uppercase; pointer-events: none; z-index: 15; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+        .video-badge::before { content: ''; display: block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
 
         /* 9. FUTURISTIC LIGHTBOX */
         .lightbox {
@@ -147,11 +190,9 @@
 
         @media (max-width: 1024px) {
             .footer-grid { grid-template-columns: 1fr 1fr; }
-            .gallery-masonry { column-count: 2; }
         }
         @media (max-width: 600px) {
             .footer-grid { grid-template-columns: 1fr; }
-            .gallery-masonry { column-count: 1; }
             .nav-links { display: none; }
             .lightbox-nav { display: none; }
         }
@@ -226,88 +267,162 @@
     </section>
 
     <section id="gallery" class="section">
-        <h2 style="font-family:'Space Grotesk'; border-left: 4px solid var(--accent); padding-left: 20px; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 3px;">The Synapse Media Hub</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+            <h2 style="font-family:'Space Grotesk'; border-left: 4px solid var(--accent); padding-left: 20px; text-transform: uppercase; letter-spacing: 3px; margin: 0;">The Synapse Media Hub</h2>
+        </div>
         
-        <div class="gallery-masonry">
+        <div class="gallery-grid">
             
-            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid1.mp4">
-                <div class="video-tag">Stage Cam</div>
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="image" data-src="Banner.jpg">
+                <div class="media-overlay">
+                    <span class="overlay-title">Symposium Banner</span>
+                    <span class="overlay-subtitle">Inauguration</span>
+                </div>
+                <img src="Banner.jpg" alt="Banner">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="VPandPrincipalEntry.jpg">
+                <div class="media-overlay">
+                    <span class="overlay-title">VP & Principal Entry</span>
+                    <span class="overlay-subtitle">Protocol</span>
+                </div>
+                <img src="VPandPrincipalEntry.jpg" alt="VP and Principal Entry">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cuttingribbon.jpg">
+                <div class="media-overlay">
+                    <span class="overlay-title">Ribbon Cutting</span>
+                    <span class="overlay-subtitle">Inauguration</span>
+                </div>
+                <img src="cuttingribbon.jpg" alt="Cutting Ribbon">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cakecutting.jpg">
+                <div class="media-overlay">
+                    <span class="overlay-title">Celebration</span>
+                    <span class="overlay-subtitle">Commencement</span>
+                </div>
+                <img src="cakecutting.jpg" alt="Cake Cutting">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="flashmob.jpeg">
+                <div class="media-overlay">
+                    <span class="overlay-title">Flashmob Energy</span>
+                    <span class="overlay-subtitle">Campus Life</span>
+                </div>
+                <img src="flashmob.jpeg" alt="Flashmob">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenmob.jpeg">
+                <div class="media-overlay">
+                    <span class="overlay-title">The Crowd</span>
+                    <span class="overlay-subtitle">Campus Life</span>
+                </div>
+                <img src="goldenmob.jpeg" alt="Event Crowd">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp.HEIC">
+                <div class="media-overlay">
+                    <span class="overlay-title">Mob Group One</span>
+                    <span class="overlay-subtitle">Participants</span>
+                </div>
+                <img src="MOBgrp.HEIC" alt="Mob Group 1">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp2.HEIC">
+                <div class="media-overlay">
+                    <span class="overlay-title">Mob Group Two</span>
+                    <span class="overlay-subtitle">Participants</span>
+                </div>
+                <img src="MOBgrp2.HEIC" alt="Mob Group 2">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
+                <div class="media-overlay">
+                    <span class="overlay-title">The Team</span>
+                    <span class="overlay-subtitle">Organization</span>
+                </div>
+                <img src="goldenboys.jpeg" alt="Team">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="stage.jpeg">
+                <div class="media-overlay">
+                    <span class="overlay-title">Main Stage</span>
+                    <span class="overlay-subtitle">Events</span>
+                </div>
+                <img src="stage.jpeg" alt="Main Stage">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="GaneshStage.HEIC">
+                <div class="media-overlay">
+                    <span class="overlay-title">Ganesh Stage</span>
+                    <span class="overlay-subtitle">Tradition</span>
+                </div>
+                <img src="GaneshStage.HEIC" alt="Ganesh Stage">
+            </div>
+
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="video" data-src="vid1.mp4">
+                <div class="video-badge">Stage Cam</div>
+                <div class="media-overlay">
+                    <span class="overlay-title">Stage Perspective</span>
+                    <span class="overlay-subtitle">Live View</span>
+                </div>
                 <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vid1.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="flashmob.jpeg">
-                <img src="flashmob.jpeg" alt="Flashmob">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenboys.jpeg">
-                <img src="goldenboys.jpeg" alt="Team">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vid2.mp4">
-                <div class="video-tag">B-Roll</div>
+            <div class="media-node reveal lightbox-trigger span-wide" data-type="video" data-src="vid2.mp4">
+                <div class="video-badge">B-Roll</div>
+                <div class="media-overlay">
+                    <span class="overlay-title">Atmosphere</span>
+                    <span class="overlay-subtitle">Cinematic</span>
+                </div>
                 <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vid2.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="goldenmob.jpeg">
-                <img src="goldenmob.jpeg" alt="Event Crowd">
-            </div>
-
             <div class="media-node reveal lightbox-trigger" data-type="video" data-src="vi3.mp4">
-                <div class="video-tag">Highlights</div>
+                <div class="video-badge">Highlights</div>
+                <div class="media-overlay">
+                    <span class="overlay-title">Event Recap</span>
+                    <span class="overlay-subtitle">Highlights</span>
+                </div>
                 <video muted loop playsinline preload="auto" onmouseover="this.play()" onmouseout="this.pause()">
                     <source src="vi3.mp4" type="video/mp4">
                 </video>
             </div>
 
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="stage.jpeg">
-                <img src="stage.jpeg" alt="Main Stage">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="Banner.jpg">
-                <img src="Banner.jpg" alt="Banner">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="VPandPrincipalEntry.jpg">
-                <img src="VPandPrincipalEntry.jpg" alt="VP and Principal Entry">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cuttingribbon.jpg">
-                <img src="cuttingribbon.jpg" alt="Cutting Ribbon">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="cakecutting.jpg">
-                <img src="cakecutting.jpg" alt="Cake Cutting">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp.HEIC">
-                <img src="MOBgrp.HEIC" alt="Mob Group 1">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="MOBgrp2.HEIC">
-                <img src="MOBgrp2.HEIC" alt="Mob Group 2">
-            </div>
-
-            <div class="media-node reveal lightbox-trigger" data-type="image" data-src="GaneshStage.HEIC">
-                <img src="GaneshStage.HEIC" alt="Ganesh Stage">
-            </div>
-
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3353.JPG">
+                <div class="media-overlay">
+                    <span class="overlay-title">Candid Shot 1</span>
+                    <span class="overlay-subtitle">Archives</span>
+                </div>
                 <img src="IMG_3353.JPG" alt="Event Image 3353">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3696.JPG">
+                <div class="media-overlay">
+                    <span class="overlay-title">Candid Shot 2</span>
+                    <span class="overlay-subtitle">Archives</span>
+                </div>
                 <img src="IMG_3696.JPG" alt="Event Image 3696">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3840.HEIC">
+                <div class="media-overlay">
+                    <span class="overlay-title">Candid Shot 3</span>
+                    <span class="overlay-subtitle">Archives</span>
+                </div>
                 <img src="IMG_3840.HEIC" alt="Event Image 3840">
             </div>
 
             <div class="media-node reveal lightbox-trigger" data-type="image" data-src="IMG_3841.HEIC">
+                <div class="media-overlay">
+                    <span class="overlay-title">Candid Shot 4</span>
+                    <span class="overlay-subtitle">Archives</span>
+                </div>
                 <img src="IMG_3841.HEIC" alt="Event Image 3841">
             </div>
 
